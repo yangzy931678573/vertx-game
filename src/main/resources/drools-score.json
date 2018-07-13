@@ -1,0 +1,22 @@
+{
+  "lookup"   : "ScoreSession",
+  "commands" : [ 
+  { "insert" : {
+      "object" : {"com.redhatkeynote.score.Player":{
+         "uuid"     : "p3",
+         "username" : "John Doe",
+         "team"     : 1,
+         "score"    : 10,
+         "consecutivePops"     : 20,
+         "goldenSnitch" : true
+      }},
+      "out-identifier" : "player",
+      "return-object" : true
+    }
+  }, 
+  {
+    "fire-all-rules" : {}
+  } ]
+}
+
+
