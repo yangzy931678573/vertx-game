@@ -108,7 +108,7 @@
                                 <argument>${verticle.main}</argument>
                                 <argument>--redeploy=src/**/*</argument>
                                 <argument>--launcher-class=${launcher}</argument>
-                                <argument>--on-redeploy=mvn compile</argument>
+                                <argument>--on-redeploy=mvn compile package -DskipTests</argument>
                             </arguments>
                         </configuration>
                     </execution>
