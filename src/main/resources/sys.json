@@ -1,0 +1,9 @@
+{
+  "ACHIEVEMENTS_SERVER": "localhost",
+  "ACHIEVEMENTS_SERVER_PORT": "9090",
+  "SCORE_SERVER": "localhost",
+  "SCORE_SERVER_PORT": "8080",
+  "SCORE_PASSWORD": "admin",
+  "SCORE_USER": "123456",
+  "vertx.LOGGER-delegate-factory-class-name": "io.vertx.core.logging.Log4j2LogDelegateFactory"
+}

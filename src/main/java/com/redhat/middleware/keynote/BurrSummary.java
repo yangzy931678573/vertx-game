@@ -7,13 +7,16 @@ import io.vertx.core.http.HttpClientOptions;
 import io.vertx.core.http.HttpClientRequest;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Base64;
 import java.util.Iterator;
 
 public class BurrSummary extends AbstractVerticle {
-    private static final String USERNAME = "kiewb";
-    private static final String PASSWORD = "kiewb";
+    private static final Logger LOGGER = LogManager.getLogger(BurrSummary.class);
+    private static final String USERNAME = "admin";
+    private static final String PASSWORD = "123456";
     private static final String defaultHost = "localhost";
     private static final int defaultPort = 8080;
     private static final String defaultPath = "/kie-server/services/rest/server/containers/instances/score";
@@ -24,7 +27,7 @@ public class BurrSummary extends AbstractVerticle {
 
         String basicAuth = "Basic " + Base64.getEncoder().encodeToString(usernameAndPassword.toString().getBytes("UTF-8"));
 
-        System.out.println("basicAuth: " + basicAuth);
+        LOGGER.info(" basicAuth = [ {} ] ", basicAuth);
 
         final long interval = 500L;
 
@@ -91,7 +94,7 @@ public class BurrSummary extends AbstractVerticle {
                     t.printStackTrace();
                     client.close();
                 });
-                System.out.println("! resp.statusCode(): " + response.statusCode());
+                LOGGER.info("! resp.statusCode() = {} ", response.statusCode());
 
                 if (response.statusCode() == 200) {
                     response.bodyHandler(body -> {
@@ -107,15 +110,15 @@ public class BurrSummary extends AbstractVerticle {
 
                         final JsonArray topPlayerScores = scoreSummary.getJsonArray("topPlayerScores");
 
-                        System.out.println("topPlayerScores: " + topPlayerScores);
+                        LOGGER.info("topPlayerScores = [ {} ] ", topPlayerScores);
 
                         vertx.eventBus().publish("/leaders", topPlayerScores);
 
                         final JsonArray teamScores = scoreSummary.getJsonArray("teamScores");
 
-                        System.out.println("teamScores: " + teamScores);
+                        LOGGER.info("teamScores = [ {} ] ", teamScores);
 
-                        vertx.eventBus().publish("/scores",teamScores);
+                        vertx.eventBus().publish("/scores", teamScores);
 
                     });
                 } // if 200
@@ -147,32 +150,32 @@ public class BurrSummary extends AbstractVerticle {
     private void handleResponse(JsonObject output) {
 
         // JsonObject json = output.toJsonObject();
-        System.out.println("OUTPUT: " + output);
+        LOGGER.info("OUTPUT = [ {} ] ", output);
 
         JsonArray resultsArray = output.getJsonObject("result")
                 .getJsonObject("execution-results")
                 .getJsonArray("results");
 
-        System.out.println("\nresultsArray: " + resultsArray);
+        LOGGER.info("resultsArray = [ {} ] ", resultsArray);
 
         JsonObject x = resultsArray.getJsonObject(0);
 
-        System.out.println("x: " + x);
+        LOGGER.info("resultsArray[0] = [ {} ] ", x);
 
         JsonObject summaryResults = resultsArray.getJsonObject(0)
                 .getJsonObject("value")
                 .getJsonObject("com.redhatkeynote.score.ScoreSummary");
 
-        System.out.println("\nsummaryResults: " + summaryResults);
-
+        LOGGER.info("summaryResults = [ {} ] ", summaryResults);
 
         JsonArray teamScores = summaryResults.getJsonArray("teamScores");
-        System.out.println("\nteamScores: " + teamScores);
+
+        LOGGER.info("teamScores = [ {} ] ", teamScores);
 
         Iterator i = teamScores.iterator();
         while (i.hasNext()) {
             JsonObject achievement = (JsonObject) i.next();
-            System.out.println(achievement.getInteger("score"));
+            LOGGER.info("score = [ {} ] ", achievement.getInteger("score"));
         } // while
 
     } // handleReponse
