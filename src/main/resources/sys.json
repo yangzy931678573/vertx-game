@@ -6,5 +6,5 @@
   "SCORE_PASSWORD": "admin",
   "SCORE_USER": "123456",
   "vertx.LOGGER-delegate-factory-class-name": "io.vertx.core.logging.Log4j2LogDelegateFactory",
-  "listenToExit":"1"
+  "exit": "1"
 }

@@ -16,6 +16,7 @@ public class MyLauncher extends Launcher {
     private static final Logger LOGGER = LogManager.getLogger(MyLauncher.class);
 
     private FileSystem fileSystem = null;
+    private Thread exitWatch = null;
 
     public MyLauncher() {
         Vertx vertx = Vertx.vertx();
@@ -28,15 +29,19 @@ public class MyLauncher extends Launcher {
             System.setProperty(pro.getKey(), (String) pro.getValue());
             LOGGER.info("[{} = {}] => System.property ", proName, proValue);
         });
-        String listenToExit = System.getProperty("listenToExit");
+        String exit = System.getProperty("exit");
         try {
-            boolean flag = Integer.parseInt(listenToExit) == 1;
-            if (flag) {
-                new GracefullyExit(vertx).start();
-                LOGGER.info("输入1退出应用!!");
+            boolean flag = Integer.parseInt(exit) == 1;
+            if (flag && exitWatch == null) {
+                exitWatch = new GracefullyExit();
+                if (!exitWatch.isAlive()) {
+                    exitWatch.start();
+                    LOGGER.info("===========>>>>>>>>>>> 输入1退出应用!!");
+                }
+
             }
         } catch (NumberFormatException e) {
-            LOGGER.info("错误的配置:[ listenToExit = {} ]", listenToExit);
+            LOGGER.info("===========>>>>>>>>>>>未正确配置:[ listenToExit = {} ]", exit);
         }
     }
 
