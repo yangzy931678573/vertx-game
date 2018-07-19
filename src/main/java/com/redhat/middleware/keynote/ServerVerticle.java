@@ -24,7 +24,7 @@ public class ServerVerticle extends AbstractVerticle {
     private Counter activeUserCounter;
 
     @Override
-    public void start(Future<Void> future) throws Exception {
+    public void start(Future<Void> future) {
         Router router = Router.router(vertx);
 
         router.route().handler(BodyHandler.create());

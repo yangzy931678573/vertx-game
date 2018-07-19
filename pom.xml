@@ -106,7 +106,7 @@
                                 <argument>${launcher}</argument>
                                 <argument>run</argument>
                                 <argument>${verticle.main}</argument>
-                                <argument>--redeploy=src/main/*</argument>
+                                <argument>--redeploy=src/main/**</argument>
                                 <argument>--launcher-class=${launcher}</argument>
                                 <argument>--on-redeploy=mvn compile -DskipTests</argument>
                             </arguments>

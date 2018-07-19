@@ -28,24 +28,21 @@ public class MyLauncher extends Launcher {
             System.setProperty(pro.getKey(), (String) pro.getValue());
             LOGGER.info("[{} = {}] => System.property ", proName, proValue);
         });
-       /* System.setProperty("ACHIEVEMENTS_SERVER", "localhost");
-        System.setProperty("ACHIEVEMENTS_SERVER_PORT", "9090");
-        System.setProperty("SCORE_SERVER", "localhost");
-        System.setProperty("SCORE_SERVER_PORT", "8080");
-        System.setProperty("SCORE_PASSWORD", "kiewb");
-        System.setProperty("SCORE_USER", "kiewb");
-        System.setProperty("vertx.LOGGER-delegate-factory-class-name", "io.vertx.core.logging.Log4j2LogDelegateFactory");
-       */
+        String listenToExit = System.getProperty("listenToExit");
+        try {
+            boolean flag = Integer.parseInt(listenToExit) == 1;
+            if (flag) {
+                new GracefullyExit(vertx).start();
+                LOGGER.info("输入1退出应用!!");
+            }
+        } catch (NumberFormatException e) {
+            LOGGER.info("错误的配置:[ listenToExit = {} ]", listenToExit);
+        }
     }
 
     public static void main(String[] args) {
         LOGGER.info(">>> >>> >>>  my game-server application start ! ");
         (new MyLauncher()).dispatch(args);
-    }
-
-    @Override
-    public void afterConfigParsed(JsonObject config) {
-
     }
 
     @Override

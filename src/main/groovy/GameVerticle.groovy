@@ -14,7 +14,7 @@ import java.util.logging.Logger
 
 class GameVerticle extends GroovyVerticle {
 
-    private final static Logger LOGGER = Logger.getLogger(GameVerticle.class.getName());
+    private final static Logger LOGGER = Logger.getLogger(GameVerticle.class.getName())
 
     // Configuration and constants
     public static final Map<String, Serializable> DEFAULT_CONF = [
@@ -131,13 +131,13 @@ class GameVerticle extends GroovyVerticle {
             scoreAuthHeader = "Basic " + Base64.getEncoder().encodeToString((scoreUser + ':' + scorePassword).getBytes("UTF-8"))
         }
 
-        EventBus eventBus = vertx.eventBus();
+        EventBus eventBus = vertx.eventBus()
 
         // Receive configuration from the eventbus
         eventBus.<Map> consumer("configuration", {
             message ->
-                Map configuration = message.body();
-                setConfiguration(configuration);
+                Map configuration = message.body()
+                setConfiguration(configuration)
         })
 
         // A configuration has been pushed, retrieve it from the server.
@@ -184,11 +184,11 @@ class GameVerticle extends GroovyVerticle {
     // onPlayerConnection method
     Handler<Message> onNewAdmin(EventBus eventBus) {
         { m ->
-            Admin admin = new Admin();
-            admins.add(admin);
+            Admin admin = new Admin()
+            admins.add(admin)
             def consumer = eventBus.<Map> consumer(admin.userId + "/message")
             consumer.handler({ msg ->
-                Map message = msg.body();
+                Map message = msg.body()
                 def messageEvent = message['event']
                 if (messageEvent == "gone") {
                     consumer.unregister()
@@ -433,14 +433,14 @@ class GameVerticle extends GroovyVerticle {
             println("Number of attempts reached " + attempt + ", cancelling")
             future.complete()
         } else {
-            vertx.setTimer(1000, { x -> retryableProcessSend(newAttempt, player, aggregatedScore, future) })
+            vertx.setTimer(1000, { retryableProcessSend(newAttempt, player, aggregatedScore, future) })
         }
     }
 
     def retryableProcessSend(int attempt, Player player, aggregatedScore, Future future) {
-        def String uuid = player.userId
-        def String username = player.username
-        def int team = player.team.number
+        String uuid = player.userId
+        String username = player.username
+        int team = player.team.number
 
         def playerUpdate = '{' +
                 '  "lookup"   : "ScoreSession",' +
